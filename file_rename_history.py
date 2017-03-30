@@ -10,12 +10,17 @@ class CommandException(Exception):
 class CreateFile(object):
     def __init__(self, file_list):
         self.file_list = file_list
+        self.dir_ = os.getcwd()
 
     def execute(self):
-        dir_ = os.getcwd()
         for each in self.file_list:
-            file_ = open(dir_ + os.sep + each, 'w')
-            file_.close()
+            open(self.dir_ + os.sep + each, 'w').close()
+
+    def undo(self):
+        for each_file in self.file_list:
+            if not os.path.isfile(self.dir_ + os.sep + each_file):
+                raise StopUndo("No file found {}".format(each_file))
+            os.remove(each_file)
 
 
 class RenameFile(object):
@@ -46,10 +51,13 @@ class History(object):
         self.commands.pop().undo()
 
 if __name__=="__main__":
-    CreateFile(["filepath1", "filepath3"]).execute()
     history = History()
+    history.execute(CreateFile(["filepath1", "filepath3"]))
     history.execute(RenameFile("filepath1", "filepath2"))
     history.execute(RenameFile("filepath3", "filepath4"))
     history.undo()
     history.undo()
+    history.undo()
+    
+    # below undo will stop undo the history with exception raised
     history.undo()
