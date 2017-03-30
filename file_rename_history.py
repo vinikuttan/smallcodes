@@ -1,14 +1,11 @@
 #!/usr/bin/python
-
 import os
 
 class StopUndo(Exception):
     pass
 
-
 class CommandException(Exception):
     pass
-
 
 class CreateFile(object):
     def __init__(self, file_list):
@@ -34,7 +31,6 @@ class RenameFile(object):
 
 
 class History(object):
-
     def __init__(self):
         self.commands = list()
 
