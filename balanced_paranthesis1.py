@@ -24,15 +24,22 @@ class Stack(object):
 def balanced_paranthesis(expression):
     """ Simple algorithm to find balance paranthesis """
 
+    open_braces = '({['
+    close_braces = ')}]'
+
     stack = Stack()
+
     for i in expression:
-        if i  == "(":
+        if i in open_braces:
             stack.push(i)
 
-        elif i == ")":
+        elif i in close_braces:
             if stack.is_empty():
                 return False
-            stack.pop()
+
+            top_item = stack.pop()
+            if not(open_braces.index(top_item) == close_braces.index(i)):
+                return False
 
     return True if stack.is_empty() else False
 
